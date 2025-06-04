@@ -65,7 +65,7 @@ def main():
     recognizer.train(faces, np.array(labels))
 
     # Sabit eşik değeri kullan
-    threshold = 80  # Daha düşük değer = daha kesin eşleşme
+    threshold = 75  # Dengeli tanıma için ayarlandı
 
     # Start video capture
     cap = cv2.VideoCapture(0)
@@ -90,7 +90,8 @@ def main():
             face = cv2.resize(gray[y:y+h, x:x+w], (200, 200))
             label, confidence = recognizer.predict(face)
 
-            if confidence < threshold and label in label_map:
+            # Dengeli doğrulama kriterleri
+            if confidence < threshold and label in label_map and confidence > 1:
                 name = label_map[label]
                 color = (0, 255, 0)  # Yeşil
             else:
